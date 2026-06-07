@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoStore — Modern E-commerce Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <a href="/" class="logo" id="header-logo">CoStore</a>
+            
+            <nav class="nav">
+                <a href="/" class="nav-link active">Shop</a>
+                <a href="/orders/" class="nav-link" id="nav-orders" style="display: none;">My Orders</a>
+                <a href="/cart/" class="cart-btn" id="nav-cart">
+                    <span>Cart</span>
+                    <span class="cart-badge" id="cart-count">0</span>
+                </a>
+            </nav>
+
+            <div class="auth-section" id="auth-header-section">
+                <!-- Will be dynamically populated by JS -->
+                <a href="/auth/" class="btn btn-outline btn-sm">Sign In</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <span class="hero-tag">New Collection</span>
+                <h1 class="hero-title">Premium Goods. Minimalist Design.</h1>
+                <p class="hero-subtitle">Meticulously crafted essentials designed for modern daily life. Elevate your workspace and lifestyle.</p>
+            </div>
+        </section>
+
+        <!-- Catalog Controls -->
+        <section class="catalog-controls">
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="Search products...">
+                <button class="btn btn-primary" id="search-btn">Search</button>
+            </div>
+            
+            <div class="categories" id="category-filters">
+                <button class="category-btn active" data-category="">All</button>
+                <button class="category-btn" data-category="Audio">Audio</button>
+                <button class="category-btn" data-category="Wearables">Wearables</button>
+                <button class="category-btn" data-category="Accessories">Accessories</button>
+                <button class="category-btn" data-category="Home">Home</button>
+                <button class="category-btn" data-category="Kitchen">Kitchen</button>
+                <button class="category-btn" data-category="Travel">Travel</button>
+            </div>
+        </section>
+
+        <!-- Product Grid -->
+        <section class="products-section">
+            <div class="product-grid" id="product-grid">
+                <!-- Dynamic product cards populated by JS -->
+                <div class="loading-spinner">Loading catalog...</div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <p>&copy; 2026 CoStore. All rights reserved. Built for CodeAlpha.</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

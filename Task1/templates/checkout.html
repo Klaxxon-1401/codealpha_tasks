@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout — CoStore</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <a href="/" class="logo" id="header-logo">CoStore</a>
+            
+            <nav class="nav">
+                <a href="/" class="nav-link">Shop</a>
+                <a href="/orders/" class="nav-link" id="nav-orders" style="display: none;">My Orders</a>
+                <a href="/cart/" class="cart-btn" id="nav-cart">
+                    <span>Cart</span>
+                    <span class="cart-badge" id="cart-count">0</span>
+                </a>
+            </nav>
+
+            <div class="auth-section" id="auth-header-section">
+                <a href="/auth/" class="btn btn-outline btn-sm">Sign In</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="checkout-page-container">
+            <h1 class="page-title">Secure Checkout</h1>
+            
+            <div class="checkout-layout" id="checkout-layout-container">
+                <!-- If guest, redirect or show message. Else show checkout forms -->
+                <div class="loading-spinner">Loading checkout details...</div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <p>&copy; 2026 CoStore. All rights reserved. Built for CodeAlpha.</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

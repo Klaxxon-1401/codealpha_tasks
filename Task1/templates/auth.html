@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Access — CoStore</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <a href="/" class="logo" id="header-logo">CoStore</a>
+            
+            <nav class="nav">
+                <a href="/" class="nav-link">Shop</a>
+                <a href="/orders/" class="nav-link" id="nav-orders" style="display: none;">My Orders</a>
+                <a href="/cart/" class="cart-btn" id="nav-cart">
+                    <span>Cart</span>
+                    <span class="cart-badge" id="cart-count">0</span>
+                </a>
+            </nav>
+
+            <div class="auth-section" id="auth-header-section">
+                <!-- Stays blank or login btn -->
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content flex-center">
+        <div class="auth-card">
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="tab-login">Sign In</button>
+                <button class="auth-tab" id="tab-register">Register</button>
+            </div>
+            
+            <div class="auth-forms">
+                <!-- Login Form -->
+                <form id="login-form" class="auth-form active">
+                    <h2 class="form-title">Welcome Back</h2>
+                    <p class="form-subtitle">Enter your credentials to access your account.</p>
+                    
+                    <div class="form-group">
+                        <label for="login-username">Username</label>
+                        <input type="text" id="login-username" required placeholder="e.g. devan">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" required placeholder="••••••••">
+                    </div>
+                    
+                    <div class="error-msg" id="login-error"></div>
+                    
+                    <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                </form>
+
+                <!-- Register Form -->
+                <form id="register-form" class="auth-form">
+                    <h2 class="form-title">Create Account</h2>
+                    <p class="form-subtitle">Join us to save shipping addresses and track orders.</p>
+                    
+                    <div class="form-group">
+                        <label for="register-username">Username</label>
+                        <input type="text" id="register-username" required placeholder="e.g. devan_c">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="register-email">Email Address</label>
+                        <input type="email" id="register-email" required placeholder="name@example.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="register-fullname">Full Name</label>
+                        <input type="text" id="register-fullname" required placeholder="e.g. Devan C">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="register-password">Password</label>
+                        <input type="password" id="register-password" required placeholder="At least 6 characters">
+                    </div>
+                    
+                    <div class="error-msg" id="register-error"></div>
+                    
+                    <button type="submit" class="btn btn-primary btn-block">Register</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <p>&copy; 2026 CoStore. All rights reserved. Built for CodeAlpha.</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

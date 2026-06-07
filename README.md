@@ -62,3 +62,62 @@ An account is seeded in the database for testing:
 - **Email**: `devan@example.com`
 
 *(New user accounts can also be created via the registration form).*
+
+---
+
+## Task 2: Social Media Platform
+
+A responsive mini Social Media application allowing users to share posts, write comments, like posts, and follow other users.
+
+### Technology Stack
+- **Backend**: Python + Django
+- **Database**: SQLite3
+- **Frontend**: Vanilla HTML5, CSS3, JavaScript ES6
+
+### Core Features
+1. **Feed Dashboard**: Chronological timeline showing updates from followed accounts, with a fallback to the public global feed if no users are followed.
+2. **Interactive Profiles**: Displays bio, locations, avatar pictures, followings and followers counts, along with a grid of posts shared by the user.
+3. **Follower System**: Toggleable follow links on profile details and feed suggestions to build personalized feeds.
+4. **Likes & Comments**: Interactive toggle switches to like posts and popup modals to view/write comments.
+5. **Dynamic Search**: Instant dropdown search results matching users by username or display names.
+
+### Local Setup Instructions
+
+#### First-Time Setup
+1. Open PowerShell and navigate to the project directory:
+   ```powershell
+   cd "C:\codealpha_tasks\Codealpha_SocialMediaApp"
+   ```
+2. Create a local virtual environment:
+   ```powershell
+   python -m venv venv
+   ```
+3. Activate the virtual environment:
+   ```powershell
+   .\venv\Scripts\activate
+   ```
+4. Install the required dependencies:
+   ```powershell
+   pip install -r requirements.txt
+   ```
+5. Start the development server:
+   ```powershell
+   python manage.py runserver
+   ```
+6. Open the application in a browser:
+   `http://127.0.0.1:8000`
+
+#### Running Subsequently
+Once setup is complete, you can start the application with:
+```powershell
+cd "C:\codealpha_tasks\Codealpha_SocialMediaApp"
+.\venv\Scripts\activate
+python manage.py runserver
+```
+
+### Test Account Credentials
+Three seeded test accounts are available in the database (all accounts share the same password):
+- **Usernames**: `alice`, `bob`, `clara`
+- **Password**: `password123`
+
+*(New user accounts can also be created via the registration form).*

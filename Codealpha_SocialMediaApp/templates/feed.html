@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feed — CoSocial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <a href="/" class="logo">CoSocial</a>
+            
+            <div class="search-users-box">
+                <input type="text" id="search-users-input" placeholder="Search people...">
+                <div class="search-results-dropdown" id="search-results-dropdown" style="display: none;"></div>
+            </div>
+
+            <nav class="nav">
+                <a href="/" class="nav-link active">Feed</a>
+                <a href="#" class="nav-link" id="header-my-profile-link">Profile</a>
+                <div class="auth-section" id="auth-header-section">
+                    <button class="btn btn-outline btn-sm" id="logout-btn">Logout</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content feed-layout">
+        <!-- Left Sidebar: Profile Summary -->
+        <aside class="sidebar-left">
+            <div class="profile-card-preview" id="profile-summary-card">
+                <div class="loading-spinner">Loading profile...</div>
+            </div>
+        </aside>
+
+        <!-- Center Section: Feed & Post Creation -->
+        <section class="feed-center">
+            <!-- Create Post Box -->
+            <div class="create-post-card">
+                <form id="create-post-form">
+                    <textarea id="post-content-input" placeholder="What is on your mind?" required maxlength="1000"></textarea>
+                    <div class="create-post-footer">
+                        <span class="char-counter" id="char-counter">0/1000</span>
+                        <button type="submit" class="btn btn-primary btn-sm">Post</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Feed Stream -->
+            <div class="feed-stream" id="feed-stream">
+                <div class="loading-spinner">Loading your feed...</div>
+            </div>
+        </section>
+
+        <!-- Right Sidebar: Suggested Connections -->
+        <aside class="sidebar-right">
+            <div class="suggestions-card">
+                <h3>Who to Follow</h3>
+                <div class="suggestions-list" id="suggestions-list">
+                    <div class="loading-spinner">Loading suggestions...</div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <p>&copy; 2026 CoSocial. Built for CodeAlpha.</p>
+        </div>
+    </footer>
+
+    <!-- Comments Modal -->
+    <div class="modal" id="comments-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Comments</h3>
+                <span class="close-modal-btn" id="close-comments-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="comments-list" id="modal-comments-list"></div>
+                <form id="modal-comment-form" class="comment-input-form">
+                    <input type="text" id="modal-comment-input" placeholder="Write a comment..." required maxlength="500">
+                    <button type="submit" class="btn btn-primary btn-sm">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

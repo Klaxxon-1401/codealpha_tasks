@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile — CoSocial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <a href="/" class="logo">CoSocial</a>
+            
+            <div class="search-users-box">
+                <input type="text" id="search-users-input" placeholder="Search people...">
+                <div class="search-results-dropdown" id="search-results-dropdown" style="display: none;"></div>
+            </div>
+
+            <nav class="nav">
+                <a href="/" class="nav-link">Feed</a>
+                <a href="#" class="nav-link active" id="header-my-profile-link">Profile</a>
+                <div class="auth-section" id="auth-header-section">
+                    <button class="btn btn-outline btn-sm" id="logout-btn">Logout</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content profile-page-container">
+        <!-- Profile Header -->
+        <section class="profile-header-card" id="profile-header">
+            <div class="loading-spinner">Loading profile details...</div>
+        </section>
+
+        <!-- User Posts -->
+        <section class="profile-posts-section">
+            <h2 class="section-title">Posts</h2>
+            <div class="feed-stream" id="profile-posts-list">
+                <div class="loading-spinner">Loading posts...</div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <p>&copy; 2026 CoSocial. Built for CodeAlpha.</p>
+        </div>
+    </footer>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal" id="edit-profile-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Profile</h3>
+                <span class="close-modal-btn" id="close-edit-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="edit-profile-form">
+                    <div class="form-group">
+                        <label for="edit-fullname">Full Name</label>
+                        <input type="text" id="edit-fullname" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-location">Location</label>
+                        <input type="text" id="edit-location" placeholder="e.g. Bangalore, India">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-avatar">Avatar URL</label>
+                        <input type="text" id="edit-avatar" placeholder="Image URL">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-bio">Bio</label>
+                        <textarea id="edit-bio" rows="3" maxlength="500" placeholder="Tell us about yourself..."></textarea>
+                    </div>
+                    <div class="error-msg" id="edit-profile-error"></div>
+                    <button type="submit" class="btn btn-primary btn-block">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comments Modal -->
+    <div class="modal" id="comments-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Comments</h3>
+                <span class="close-modal-btn" id="close-comments-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="comments-list" id="modal-comments-list"></div>
+                <form id="modal-comment-form" class="comment-input-form">
+                    <input type="text" id="modal-comment-input" placeholder="Write a comment..." required maxlength="500">
+                    <button type="submit" class="btn btn-primary btn-sm">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

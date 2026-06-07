@@ -39,10 +39,4 @@ To run this project:
 4. Open the application in a browser:
    `http://127.0.0.1:8000`
 
-### Test Account Credentials
-Use the following credentials to sign in:
-- **Username**: `devan`
-- **Password**: `password123`
-- **Email**: `devan@example.com`
-
 *(New accounts can also be registered via the registration form).*

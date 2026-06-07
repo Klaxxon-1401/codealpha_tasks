@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workspace Dashboard — CoProject</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="dashboard-body">
+    <div class="app-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-text">CoProject</div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="sidebar-section">
+                    <div class="sidebar-section-header">
+                        <span>Workspaces</span>
+                        <button class="sidebar-action-btn" id="new-project-btn" title="Create New Project">+</button>
+                    </div>
+                    <ul class="project-list" id="sidebar-project-list">
+                        <!-- Loaded dynamically -->
+                        <div class="sidebar-spinner">Loading workspaces...</div>
+                    </ul>
+                </div>
+            </nav>
+            
+            <div class="sidebar-footer" id="sidebar-user-section">
+                <!-- User profile loaded dynamically -->
+            </div>
+        </aside>
+
+        <!-- Main Workspace Area -->
+        <main class="main-content">
+            <!-- Empty State / Project Select -->
+            <section class="workspace-panel active" id="panel-empty-state">
+                <div class="empty-state-card">
+                    <div class="empty-state-graphic">
+                        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
+                            <path d="M12 6v6l4 2"/>
+                        </svg>
+                    </div>
+                    <h2>Welcome to your Workspace</h2>
+                    <p>Select an existing project from the sidebar or launch a new one to organize your tasks, assign team members, and track real-time progress metrics.</p>
+                    <button class="btn btn-primary" id="empty-state-new-project-btn">Create New Project</button>
+                </div>
+            </section>
+
+            <!-- Project Active Panel -->
+            <section class="workspace-panel" id="panel-active-project">
+                <header class="workspace-header">
+                    <div class="workspace-title-info">
+                        <h1 class="workspace-title" id="active-project-name">Project Name</h1>
+                        <p class="workspace-desc" id="active-project-desc">Project description goes here.</p>
+                    </div>
+                    <div class="workspace-header-actions">
+                        <button class="btn btn-danger-outline btn-sm" id="delete-project-btn">Delete Board</button>
+                    </div>
+                </header>
+
+                <!-- Navigation Tabs -->
+                <div class="workspace-tabs">
+                    <button class="workspace-tab active" id="tab-dashboard">Dashboard</button>
+                    <button class="workspace-tab" id="tab-kanban">Kanban Board</button>
+                </div>
+
+                <!-- Tab Content: Dashboard Metrics -->
+                <div class="tab-panel active" id="view-dashboard">
+                    <div class="dashboard-grid">
+                        <!-- Metrics Cards -->
+                        <div class="stat-card">
+                            <div class="stat-label">Total Tasks</div>
+                            <div class="stat-value" id="stat-total-tasks">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">To Do</div>
+                            <div class="stat-value text-todo" id="stat-todo-tasks">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">In Progress</div>
+                            <div class="stat-value text-progress" id="stat-progress-tasks">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Completed</div>
+                            <div class="stat-value text-done" id="stat-done-tasks">0</div>
+                        </div>
+
+                        <!-- Chart Cards (Fancy SVG) -->
+                        <div class="chart-card span-2">
+                            <h3 class="chart-title">Task Status Distribution</h3>
+                            <div class="chart-content donut-chart-container">
+                                <!-- Dynamic SVG Donut Chart -->
+                                <svg width="220" height="220" viewBox="0 0 36 36" class="donut-chart" id="svg-donut">
+                                    <circle class="donut-ring" cx="18" cy="18" r="15.91549430918954" fill="transparent" stroke="#1e293b" stroke-width="3"></circle>
+                                    <circle class="donut-segment donut-segment-todo" cx="18" cy="18" r="15.91549430918954" fill="transparent" stroke="#3b82f6" stroke-width="3" stroke-dasharray="0 100" stroke-dashoffset="25"></circle>
+                                    <circle class="donut-segment donut-segment-progress" cx="18" cy="18" r="15.91549430918954" fill="transparent" stroke="#f59e0b" stroke-width="3" stroke-dasharray="0 100" stroke-dashoffset="25"></circle>
+                                    <circle class="donut-segment donut-segment-done" cx="18" cy="18" r="15.91549430918954" fill="transparent" stroke="#10b981" stroke-width="3" stroke-dasharray="0 100" stroke-dashoffset="25"></circle>
+                                </svg>
+                                <div class="chart-legend">
+                                    <div class="legend-item"><span class="legend-color bg-todo"></span> To Do (<span id="legend-todo-pct">0%</span>)</div>
+                                    <div class="legend-item"><span class="legend-color bg-progress"></span> In Progress (<span id="legend-progress-pct">0%</span>)</div>
+                                    <div class="legend-item"><span class="legend-color bg-done"></span> Completed (<span id="legend-done-pct">0%</span>)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chart-card span-2">
+                            <h3 class="chart-title">Tasks Priority Breakdown</h3>
+                            <div class="chart-content priority-chart-container">
+                                <div class="priority-bar-group">
+                                    <div class="priority-label-row">
+                                        <span>High Priority</span>
+                                        <span id="priority-high-count">0</span>
+                                    </div>
+                                    <div class="priority-bar-bg">
+                                        <div class="priority-bar-fill bg-high" id="priority-high-bar" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                                <div class="priority-bar-group">
+                                    <div class="priority-label-row">
+                                        <span>Medium Priority</span>
+                                        <span id="priority-medium-count">0</span>
+                                    </div>
+                                    <div class="priority-bar-bg">
+                                        <div class="priority-bar-fill bg-medium" id="priority-medium-bar" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                                <div class="priority-bar-group">
+                                    <div class="priority-label-row">
+                                        <span>Low Priority</span>
+                                        <span id="priority-low-count">0</span>
+                                    </div>
+                                    <div class="priority-bar-bg">
+                                        <div class="priority-bar-fill bg-low" id="priority-low-bar" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Upcoming Tasks list -->
+                        <div class="chart-card span-4">
+                            <h3 class="chart-title">Upcoming Task Deadlines</h3>
+                            <div class="deadlines-list" id="dashboard-deadlines-list">
+                                <!-- Loaded dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Content: Kanban Board -->
+                <div class="tab-panel" id="view-kanban">
+                    <div class="kanban-board">
+                        <!-- To Do Column -->
+                        <div class="kanban-col" data-status="TODO">
+                            <div class="kanban-col-header">
+                                <span class="kanban-col-title">To Do</span>
+                                <span class="kanban-col-badge" id="badge-todo">0</span>
+                            </div>
+                            <div class="kanban-cards-wrapper" id="col-todo" ondragover="allowDrop(event)" ondrop="handleDrop(event, 'TODO')">
+                                <!-- Tasks loaded dynamically -->
+                            </div>
+                            <button class="kanban-add-btn" onclick="openAddTaskModal('TODO')">+ Add Task</button>
+                        </div>
+
+                        <!-- In Progress Column -->
+                        <div class="kanban-col" data-status="IN_PROGRESS">
+                            <div class="kanban-col-header">
+                                <span class="kanban-col-title">In Progress</span>
+                                <span class="kanban-col-badge" id="badge-progress">0</span>
+                            </div>
+                            <div class="kanban-cards-wrapper" id="col-progress" ondragover="allowDrop(event)" ondrop="handleDrop(event, 'IN_PROGRESS')">
+                                <!-- Tasks loaded dynamically -->
+                            </div>
+                            <button class="kanban-add-btn" onclick="openAddTaskModal('IN_PROGRESS')">+ Add Task</button>
+                        </div>
+
+                        <!-- Done Column -->
+                        <div class="kanban-col" data-status="DONE">
+                            <div class="kanban-col-header">
+                                <span class="kanban-col-title">Completed</span>
+                                <span class="kanban-col-badge" id="badge-done">0</span>
+                            </div>
+                            <div class="kanban-cards-wrapper" id="col-done" ondragover="allowDrop(event)" ondrop="handleDrop(event, 'DONE')">
+                                <!-- Tasks loaded dynamically -->
+                            </div>
+                            <button class="kanban-add-btn" onclick="openAddTaskModal('DONE')">+ Add Task</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal: Create Project -->
+    <div class="modal-backdrop" id="modal-project">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>Create New Workspace</h2>
+                <button class="modal-close-btn" id="close-project-modal">&times;</button>
+            </div>
+            <form id="project-form">
+                <div class="form-group">
+                    <label for="project-name">Project Name</label>
+                    <input type="text" id="project-name" required placeholder="e.g. Design Refresh">
+                </div>
+                <div class="form-group">
+                    <label for="project-description">Description</label>
+                    <textarea id="project-description" placeholder="A short outline of the goals of this workspace..." rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Launch Project</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Create / Edit Task -->
+    <div class="modal-backdrop" id="modal-task">
+        <div class="modal-card modal-lg">
+            <div class="modal-header">
+                <h2 id="task-modal-title-text">Add Task</h2>
+                <button class="modal-close-btn" id="close-task-modal">&times;</button>
+            </div>
+            
+            <div class="task-modal-layout">
+                <!-- Left: Task Form Fields -->
+                <form id="task-form" class="task-modal-form">
+                    <input type="hidden" id="task-id">
+                    <div class="form-group">
+                        <label for="task-title">Task Title</label>
+                        <input type="text" id="task-title" required placeholder="What needs to be done?">
+                    </div>
+                    <div class="form-group">
+                        <label for="task-desc">Description</label>
+                        <textarea id="task-desc" placeholder="Details about this task..." rows="4"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="task-status">Status</label>
+                            <select id="task-status">
+                                <option value="TODO">To Do</option>
+                                <option value="IN_PROGRESS">In Progress</option>
+                                <option value="DONE">Done</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="task-priority">Priority</label>
+                            <select id="task-priority">
+                                <option value="LOW">Low</option>
+                                <option value="MEDIUM">Medium</option>
+                                <option value="HIGH">High</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="task-due">Due Date</label>
+                            <input type="date" id="task-due">
+                        </div>
+                        <div class="form-group">
+                            <label for="task-assignee">Assignee</label>
+                            <select id="task-assignee">
+                                <option value="">Unassigned</option>
+                                <!-- Loaded dynamically -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="task-modal-actions">
+                        <button type="submit" class="btn btn-primary" id="task-submit-btn">Save Task</button>
+                        <button type="button" class="btn btn-danger-outline" id="delete-task-btn" style="display: none;">Delete Task</button>
+                    </div>
+                </form>
+
+                <!-- Right: Tabs for Comments and Activity logs -->
+                <div class="task-modal-tabs-wrapper" id="task-extra-info" style="display: none;">
+                    <div class="task-extra-tabs">
+                        <button class="task-extra-tab active" id="tab-comments">Comments</button>
+                        <button class="task-extra-tab" id="tab-activity">Activity Log</button>
+                    </div>
+                    
+                    <!-- Panel: Comments -->
+                    <div class="task-extra-panel active" id="panel-comments">
+                        <div class="comments-list" id="task-comments-list">
+                            <!-- Loaded dynamically -->
+                        </div>
+                        <form id="comment-form" class="comment-input-form">
+                            <input type="text" id="comment-text" required placeholder="Write a comment...">
+                            <button type="submit" class="btn btn-primary btn-sm">Post</button>
+                        </form>
+                    </div>
+
+                    <!-- Panel: Activity Log -->
+                    <div class="task-extra-panel" id="panel-activity">
+                        <div class="activity-timeline" id="task-activity-list">
+                            <!-- Loaded dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

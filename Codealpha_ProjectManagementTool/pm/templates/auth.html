@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Access — CoProject</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="auth-body">
+    <div class="auth-container">
+        <div class="auth-header">
+            <h1 class="logo-text">CoProject</h1>
+            <p class="subtitle-text">Professional Workspace Management Platform</p>
+        </div>
+
+        <div class="auth-card">
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="tab-login">Sign In</button>
+                <button class="auth-tab" id="tab-register">Sign Up</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form" class="auth-form active">
+                <div class="form-group">
+                    <label for="login-username">Username</label>
+                    <input type="text" id="login-username" required placeholder="Enter username" autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required placeholder="••••••••" autocomplete="current-password">
+                </div>
+                <div class="error-msg" id="login-error"></div>
+                <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="register-form" class="auth-form">
+                <div class="form-group">
+                    <label for="register-fullname">Full Name</label>
+                    <input type="text" id="register-fullname" placeholder="e.g. Alice Smith">
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email Address</label>
+                    <input type="email" id="register-email" required placeholder="name@example.com" autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label for="register-username">Username</label>
+                    <input type="text" id="register-username" required placeholder="Choose username" autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Password</label>
+                    <input type="password" id="register-password" required placeholder="At least 6 characters" autocomplete="new-password">
+                </div>
+                <div class="error-msg" id="register-error"></div>
+                <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

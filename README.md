@@ -121,3 +121,66 @@ Three seeded test accounts are available in the database (all accounts share the
 - **Password**: `password123`
 
 *(New user accounts can also be created via the registration form).*
+
+---
+
+## Task 3: Project Management Tool
+
+A responsive visual Project Management workspace resembling Trello and Jira. It contains a dynamic dashboard with inline SVG-based analytics, interactive Kanban boards with drag-and-drop actions, project creation/deletion, task assignment, comments, and audit timeline tracking.
+
+### Technology Stack
+- **Backend**: Python + Django
+- **Database**: SQLite3
+- **Frontend**: Vanilla HTML5, CSS3, JavaScript ES6
+
+### Core Features
+1. **Interactive Kanban Board**: Visual Columns (To Do, In Progress, Done) with HTML5 Drag & Drop event bindings to transition task states seamlessly.
+2. **Dynamic SVG Dashboard**: Donut charts for status distribution and horizontal priority bar graphs rendered purely from raw SVG paths, updating automatically upon task shifts.
+3. **Task Detailed Operations**: Custom detailed modals with tabs to manage descriptions, prioritize (Low, Medium, High), set deadlines, select assignees, write comments, and view historical audit logs (timelines).
+4. **Project Workspaces**: Multi-project sidebar navigations allowing owners to launch and delete boards dynamically.
+5. **Team Management**: Shared assignee list to distribute workloads.
+
+### Local Setup Instructions
+
+#### First-Time Setup
+1. Open PowerShell and navigate to the project directory:
+   ```powershell
+   cd "C:\codealpha_tasks\Codealpha_ProjectManagementTool"
+   ```
+2. Create a local virtual environment:
+   ```powershell
+   python -m venv venv
+   ```
+3. Activate the virtual environment:
+   ```powershell
+   .\venv\Scripts\activate
+   ```
+4. Install the required dependencies:
+   ```powershell
+   pip install django
+   ```
+5. Seed the database with workspaces and team accounts:
+   ```powershell
+   python seed_db.py
+   ```
+6. Start the development server:
+   ```powershell
+   python manage.py runserver
+   ```
+7. Open the application in a browser:
+   `http://127.0.0.1:8000`
+
+#### Running Subsequently
+Once setup is complete, you can start the application with:
+```powershell
+cd "C:\codealpha_tasks\Codealpha_ProjectManagementTool"
+.\venv\Scripts\activate
+python manage.py runserver
+```
+
+### Test Account Credentials
+Three seeded test accounts are available in the database (all accounts share the same password):
+- **Usernames**: `alice`, `bob`, `clara`
+- **Password**: `password123`
+
+*(New user accounts can also be created via the registration form).*

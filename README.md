@@ -22,21 +22,43 @@ A responsive full-stack E-commerce Store application utilizing a Python/Django b
 6. **Order History**: User dashboard listing previous orders, dates, total amounts, item summaries, and fulfillment status.
 
 ### Local Setup Instructions
-To run this project:
 
+#### First-Time Setup
 1. Open PowerShell and navigate to the project directory:
    ```powershell
-   cd "C:\Codealpha stuff\Task1"
+   cd "C:\codealpha_tasks\Codealpha_SimpleEcommerceStore"
    ```
-2. Activate the Python virtual environment:
+2. Create a local virtual environment:
+   ```powershell
+   python -m venv venv
+   ```
+3. Activate the virtual environment:
    ```powershell
    .\venv\Scripts\activate
    ```
-3. Start the development server:
+4. Install the required dependencies:
+   ```powershell
+   pip install -r requirements.txt
+   ```
+5. Start the development server:
    ```powershell
    python manage.py runserver
    ```
-4. Open the application in a browser:
+6. Open the application in a browser:
    `http://127.0.0.1:8000`
 
-*(New accounts can be registered via the registration form).*
+#### Running Subsequently
+Once setup is complete, you can start the application with:
+```powershell
+cd "C:\codealpha_tasks\Codealpha_SimpleEcommerceStore"
+.\venv\Scripts\activate
+python manage.py runserver
+```
+
+### Test Account Credentials
+An account is seeded in the database for testing:
+- **Username**: `devan`
+- **Password**: `password123`
+- **Email**: `devan@example.com`
+
+*(New user accounts can also be created via the registration form).*

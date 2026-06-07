@@ -39,4 +39,4 @@ To run this project:
 4. Open the application in a browser:
    `http://127.0.0.1:8000`
 
-*(New accounts can also be registered via the registration form).*
+*(New accounts can be registered via the registration form).*

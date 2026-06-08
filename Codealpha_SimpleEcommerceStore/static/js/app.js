@@ -1,4 +1,4 @@
-﻿// Global State Management
+// Global State Management
 let currentUser = null;
 let cart = [];
 
@@ -786,17 +786,33 @@ function initPageAnimations() {
         btn.appendChild(ripple);
         ripple.addEventListener('animationend', function() { ripple.remove(); });
     });
-    var cards = document.querySelectorAll('.product-card');
-    if (cards.length > 0) {
-        var obs = new IntersectionObserver(function(entries) {
-            entries.forEach(function(entry) {
-                if (entry.isIntersecting) { var idx = Array.from(cards).indexOf(entry.target); entry.target.style.animationDelay = (idx * 55) + 'ms'; entry.target.classList.add('visible'); obs.unobserve(entry.target); }
+    var animObs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                var idx = Array.from(entry.target.parentElement.children).indexOf(entry.target);
+                if (idx === -1) idx = 0;
+                var delay = entry.target.classList.contains('order-card') ? 75 : 55;
+                entry.target.style.animationDelay = (idx * delay) + 'ms';
+                entry.target.classList.add('visible');
+                animObs.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.07 });
+
+    var mo = new MutationObserver(function(mutations) {
+        mutations.forEach(function(m) {
+            m.addedNodes.forEach(function(n) {
+                if (n.nodeType === 1) {
+                    if (n.classList.contains('product-card') || n.classList.contains('order-card') || n.classList.contains('cart-item')) {
+                        animObs.observe(n);
+                    }
+                    var children = n.querySelectorAll('.product-card, .order-card, .cart-item');
+                    children.forEach(function(c) { animObs.observe(c); });
+                }
             });
-        }, { threshold: 0.07 });
-        cards.forEach(function(c) { obs.observe(c); });
-    }
-    document.querySelectorAll('.order-card').forEach(function(card, idx) { card.style.animationDelay = (idx * 75) + 'ms'; });
-    document.querySelectorAll('.cart-item').forEach(function(item, idx) { item.style.animationDelay = (idx * 55) + 'ms'; });
+        });
+    });
+    mo.observe(document.body, { childList: true, subtree: true });
 }
 
 function showToast(message, type, duration) {

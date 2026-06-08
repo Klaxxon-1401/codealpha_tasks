@@ -1030,6 +1030,30 @@ function initPageAnimations() {
         btn.appendChild(ripple);
         ripple.addEventListener('animationend', function() { ripple.remove(); });
     });
+
+    var animObs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                animObs.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.05 });
+
+    var mo = new MutationObserver(function(mutations) {
+        mutations.forEach(function(m) {
+            m.addedNodes.forEach(function(n) {
+                if (n.nodeType === 1) {
+                    if (n.classList.contains('task-card')) {
+                        animObs.observe(n);
+                    }
+                    var children = n.querySelectorAll('.task-card');
+                    children.forEach(function(c) { animObs.observe(c); });
+                }
+            });
+        });
+    });
+    mo.observe(document.body, { childList: true, subtree: true });
 }
 
 function animateCountUp(el, end, dur) {

@@ -586,7 +586,7 @@ async function loadCheckout() {
                 clearCart();
                 container.innerHTML = `
                     <div class="empty-cart-msg" style="grid-column: span 2; border-color: var(--success-color);">
-                        <div style="font-size: 3rem; color: var(--success-color); margin-bottom: 1rem;">✓</div>
+                        <div style="color: var(--success-color); margin-bottom: 1rem;"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11.5 14.5 15.5 9.5"/></svg></div>
                         <h2>Order Placed Successfully!</h2>
                         <p>Thank you for your purchase. Your Order ID is <strong>#${result.order_id}</strong>.</p>
                         <p style="margin-bottom: 2rem;">You can track this order in your order history.</p>

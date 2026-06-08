@@ -160,7 +160,7 @@ def api_projects(request):
             'name': project.name,
             'description': project.description,
             'owner': project.owner.username
-        }, status=21)
+        }, status=201)
 
 @login_required
 @require_http_methods(["GET", "PUT", "DELETE"])
@@ -416,7 +416,7 @@ def api_task_comments(request, task_id):
                 'username': comment.user.username,
                 'avatar_url': comment.user.profile.avatar_url
             }
-        }, status=21)
+        }, status=201)
 
 # API Task Activity Endpoint
 @login_required

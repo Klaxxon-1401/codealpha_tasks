@@ -11,7 +11,9 @@ async function initApp() {
     await checkAuth();
     routePageLogic();
     setupGlobalSearch();
+    initPageAnimations();
 }
+
 
 // Authentication check
 async function checkAuth() {
@@ -686,4 +688,82 @@ function loadAuthPage() {
             registerError.textContent = "Network error. Please try again.";
         }
     });
+}
+
+/* ============================================================
+   ANIMATION & UX ENHANCEMENT UTILITIES
+   ============================================================ */
+
+function initPageAnimations() {
+    var bar = document.createElement('div');
+    bar.id = 'page-progress-bar';
+    document.body.prepend(bar);
+    setTimeout(function() { bar.remove(); }, 900);
+
+    var header = document.querySelector('.header');
+    if (header) {
+        window.addEventListener('scroll', function() {
+            header.classList.toggle('scrolled', window.scrollY > 10);
+        }, { passive: true });
+    }
+
+    if (!document.getElementById('toast-container')) {
+        var tc = document.createElement('div');
+        tc.id = 'toast-container';
+        document.body.appendChild(tc);
+    }
+
+    document.addEventListener('click', function(e) {
+        var btn = e.target.closest('.btn');
+        if (!btn || btn.disabled) return;
+        var ripple = document.createElement('span');
+        ripple.className = 'ripple-wave';
+        var rect = btn.getBoundingClientRect();
+        ripple.style.left = (e.clientX - rect.left) + 'px';
+        ripple.style.top  = (e.clientY - rect.top)  + 'px';
+        btn.appendChild(ripple);
+        ripple.addEventListener('animationend', function() { ripple.remove(); });
+    });
+
+    var posts = document.querySelectorAll('.post-card');
+    if (posts.length > 0) {
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    var idx = Array.from(posts).indexOf(entry.target);
+                    entry.target.style.animationDelay = (idx * 70) + 'ms';
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.06 });
+        posts.forEach(function(p) { observer.observe(p); });
+    }
+}
+
+function showToast(message, type, duration) {
+    if (!type) type = 'info';
+    if (!duration) duration = 3500;
+    var container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        document.body.appendChild(container);
+    }
+    var icons = {
+        success: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+        error:   '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+        info:    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#14b8a6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
+    };
+    var toast = document.createElement('div');
+    toast.className = 'toast toast-' + type;
+    toast.innerHTML = (icons[type] || icons.info) + '<span>' + message + '</span>';
+    container.appendChild(toast);
+    var dismiss = function() {
+        toast.classList.add('hiding');
+        toast.addEventListener('animationend', function() { toast.remove(); }, { once: true });
+    };
+    setTimeout(dismiss, duration);
+    toast.addEventListener('click', dismiss);
+    return toast;
 }

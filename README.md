@@ -4,6 +4,15 @@ This repository contains the tasks completed during the CodeAlpha Full Stack Dev
 
 ---
 
+## Shared UI/UX Design System
+
+All three projects have been upgraded with a modern, custom CSS/JS design system built completely from scratch without external frameworks:
+- **Animations:** Custom `@keyframes` (fadeInUp, shimmer, heartBeat, etc.) with staggered entrance effects (via `IntersectionObserver`) for smooth content loading.
+- **Micro-interactions:** Ripple effects on buttons, smooth CSS transitions (`cubic-bezier(0.4, 0, 0.2, 1)`), dynamic page-load progress bars, and a custom SVG-icon toast notification system.
+- **Aesthetics:** Glassmorphism headers, dynamic gradients, dark slate backgrounds with vibrant teal accents, and skeleton loaders for async content.
+
+---
+
 ## Task 1: Simple E-commerce Store
 
 A responsive full-stack E-commerce Store application utilizing a Python/Django backend, SQLite database, and a vanilla HTML/CSS/JavaScript frontend.

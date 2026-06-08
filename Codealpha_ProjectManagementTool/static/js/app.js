@@ -28,14 +28,15 @@ function getCookie(name) {
 // App Initialization
 async function initApp() {
     await checkUserAuth();
-    
+
     const path = window.location.pathname;
-    
+
     if (path.includes("/auth/")) {
         initAuthPage();
     } else {
         initDashboardPage();
     }
+    initPageAnimations();
 }
 
 // Check Authentication
@@ -329,11 +330,11 @@ async function loadProjectMetrics() {
         const data = await response.json();
         const stats = data.stats;
 
-        // Render Values
-        document.getElementById("stat-total-tasks").textContent = stats.total;
-        document.getElementById("stat-todo-tasks").textContent = stats.todo;
-        document.getElementById("stat-progress-tasks").textContent = stats.in_progress;
-        document.getElementById("stat-done-tasks").textContent = stats.done;
+        // Render stat values with count-up animation
+        animateCountUp(document.getElementById('stat-total-tasks'), stats.total);
+        animateCountUp(document.getElementById('stat-todo-tasks'), stats.todo);
+        animateCountUp(document.getElementById('stat-progress-tasks'), stats.in_progress);
+        animateCountUp(document.getElementById('stat-done-tasks'), stats.done);
 
         // Donut Chart calculations
         // Circumference is 100 for r=15.91549430918954
@@ -491,29 +492,35 @@ function renderTaskCards(tasksList) {
 
     const today = new Date().setHours(0,0,0,0);
 
-    return tasksList.map(t => {
+    return tasksList.map((t, idx) => {
         let isOverdue = false;
         if (t.due_date && t.status !== 'DONE') {
             const dueTime = new Date(t.due_date).setHours(0,0,0,0);
             if (dueTime < today) isOverdue = true;
         }
 
-        const dateStr = t.due_date ? new Date(t.due_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : "";
+        const dateStr = t.due_date ? new Date(t.due_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : '';
 
-        // Assignee badge
-        let assigneeHTML = "";
+        let assigneeHTML = '';
         if (t.assignee) {
             const initials = t.assignee.full_name.split(' ').map(n => n[0]).join('').substring(0,2);
             assigneeHTML = `<div class="task-card-assignee" title="Assigned to ${t.assignee.full_name}">${initials || t.assignee.username[0]}</div>`;
         }
 
+        // High-priority class for pulse animation
+        const priorityClass = t.priority === 'HIGH' ? 'priority-high' : '';
+
         return `
-            <div class="task-card" draggable="true" id="task-${t.id}" ondragstart="handleDragStart(event, ${t.id})" ondragend="handleDragEnd(event)" onclick="openEditTaskModal(${t.id})">
+            <div class="task-card ${priorityClass}" draggable="true" id="task-${t.id}"
+                style="animation-delay: ${idx * 60}ms"
+                ondragstart="handleDragStart(event, ${t.id})"
+                ondragend="handleDragEnd(event)"
+                onclick="openEditTaskModal(${t.id})">
                 <div class="task-card-header">
                     <span class="task-priority-tag ${t.priority.toLowerCase()}">${t.priority}</span>
                 </div>
                 <h4 class="task-card-title">${t.title}</h4>
-                <p class="task-card-desc">${t.description || "No description provided."}</p>
+                <p class="task-card-desc">${t.description || 'No description provided.'}</p>
                 <div class="task-card-footer">
                     <span class="task-card-due ${isOverdue ? 'overdue' : ''}">
                         ${dateStr ? `
@@ -527,25 +534,27 @@ function renderTaskCards(tasksList) {
                 </div>
             </div>
         `;
-    }).join("");
+    }).join('');
 }
 
 // Drag & Drop event handlers
 function handleDragStart(e, taskId) {
     dragTaskId = taskId;
-    e.dataTransfer.setData("text/plain", taskId);
-    e.currentTarget.style.opacity = "0.5";
-    
-    // Add drag-over listener classes to columns
-    document.querySelectorAll(".kanban-cards-wrapper").forEach(col => {
-        col.classList.add("drag-allowed");
-    });
+    e.dataTransfer.setData('text/plain', taskId);
+    e.currentTarget.classList.add('dragging');
+
+    // Mark entire board as drag-active for column highlight
+    const board = document.querySelector('.kanban-board');
+    if (board) board.classList.add('drag-active');
 }
 
 function handleDragEnd(e) {
-    e.currentTarget.style.opacity = "1";
-    document.querySelectorAll(".kanban-cards-wrapper").forEach(col => {
-        col.classList.remove("drag-allowed", "drag-over");
+    e.currentTarget.classList.remove('dragging');
+    e.currentTarget.style.opacity = '';
+    const board = document.querySelector('.kanban-board');
+    if (board) board.classList.remove('drag-active');
+    document.querySelectorAll('.kanban-cards-wrapper').forEach(col => {
+        col.classList.remove('drag-allowed', 'drag-over');
     });
 }
 
@@ -998,3 +1007,45 @@ async function loadTaskActivity(taskId) {
         listEl.innerHTML = `<div style="text-align: center; color: var(--color-danger); padding: 1rem 0;">Error loading activity timeline.</div>`;
     }
 }
+
+
+/* ============================================================
+   ANIMATION and UX ENHANCEMENT UTILITIES
+   ============================================================ */
+
+function initPageAnimations() {
+    var bar = document.createElement('div');
+    bar.id = 'page-progress-bar';
+    document.body.prepend(bar);
+    setTimeout(function() { bar.remove(); }, 900);
+    if (!document.getElementById('toast-container')) { var tc = document.createElement('div'); tc.id = 'toast-container'; document.body.appendChild(tc); }
+    document.addEventListener('click', function(e) {
+        var btn = e.target.closest('.btn');
+        if (!btn || btn.disabled) return;
+        var ripple = document.createElement('span');
+        ripple.className = 'ripple-wave';
+        var rect = btn.getBoundingClientRect();
+        ripple.style.left = (e.clientX - rect.left) + 'px';
+        ripple.style.top  = (e.clientY - rect.top)  + 'px';
+        btn.appendChild(ripple);
+        ripple.addEventListener('animationend', function() { ripple.remove(); });
+    });
+}
+
+function animateCountUp(el, end, dur) {
+    if (!el) return; if (!dur) dur = 700;
+    var startTime = performance.now();
+    function step(now) { var elapsed = now - startTime; var progress = Math.min(elapsed / dur, 1); var eased = 1 - Math.pow(1 - progress, 3); el.textContent = Math.round(end * eased); if (progress < 1) requestAnimationFrame(step); }
+    requestAnimationFrame(step);
+}
+
+function showToast(message, type, duration) {
+    if (!type) type = 'info'; if (!duration) duration = 3500;
+    var container = document.getElementById('toast-container');
+    if (!container) { container = document.createElement('div'); container.id = 'toast-container'; document.body.appendChild(container); }
+    var icons = { success: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>', error: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>', info: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#14b8a6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>' };
+    var toast = document.createElement('div'); toast.className = 'toast toast-' + type; toast.innerHTML = (icons[type] || icons.info) + '<span>' + message + '</span>'; container.appendChild(toast);
+    var dismiss = function() { toast.classList.add('hiding'); toast.addEventListener('animationend', function() { toast.remove(); }, { once: true }); };
+    setTimeout(dismiss, duration); toast.addEventListener('click', dismiss); return toast;
+}
+

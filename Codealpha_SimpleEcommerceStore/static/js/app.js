@@ -1,4 +1,4 @@
-// Global State Management
+﻿// Global State Management
 let currentUser = null;
 let cart = [];
 
@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initCart();
     checkAuth();
     routePageLogic();
+    initPageAnimations();
 });
 
 // Authentication checks
@@ -120,30 +121,6 @@ function clearCart() {
     saveCart();
 }
 
-function showToast(message) {
-    // Basic toast notifications
-    const toast = document.createElement("div");
-    toast.style.position = "fixed";
-    toast.style.bottom = "20px";
-    toast.style.right = "20px";
-    toast.style.backgroundColor = "#1e293b";
-    toast.style.color = "#f8fafc";
-    toast.style.border = "1px solid #334155";
-    toast.style.padding = "0.75rem 1.5rem";
-    toast.style.borderRadius = "8px";
-    toast.style.zIndex = "1000";
-    toast.style.fontSize = "0.9rem";
-    toast.style.fontWeight = "500";
-    toast.style.boxShadow = "0 10px 15px -3px rgba(0, 0, 0, 0.3)";
-    toast.textContent = message;
-    
-    document.body.appendChild(toast);
-    setTimeout(() => {
-        toast.style.opacity = "0";
-        toast.style.transition = "opacity 0.5s ease";
-        setTimeout(() => toast.remove(), 500);
-    }, 2500);
-}
 
 // Router & Page Logic
 function routePageLogic() {
@@ -516,7 +493,7 @@ async function loadCheckout() {
             
             <div class="error-msg" id="checkout-error"></div>
             
-            <button type="submit" class="btn btn-primary btn-block" id="submit-order-btn">Submit Order — $${total.toFixed(2)}</button>
+            <button type="submit" class="btn btn-primary btn-block" id="submit-order-btn">Submit Order â€” $${total.toFixed(2)}</button>
         </form>
         
         <div class="summary-card">
@@ -599,13 +576,13 @@ async function loadCheckout() {
             } else {
                 errorEl.textContent = result.error || "An error occurred during checkout.";
                 submitBtn.disabled = false;
-                submitBtn.textContent = `Submit Order — $${total.toFixed(2)}`;
+                submitBtn.textContent = `Submit Order â€” $${total.toFixed(2)}`;
             }
             
         } catch (err) {
             errorEl.textContent = "Network error. Please try again.";
             submitBtn.disabled = false;
-            submitBtn.textContent = `Submit Order — $${total.toFixed(2)}`;
+            submitBtn.textContent = `Submit Order â€” $${total.toFixed(2)}`;
             console.error(err);
         }
     });
@@ -784,3 +761,51 @@ async function loadOrders() {
         console.error(err);
     }
 }
+
+
+/* ============================================================
+   ANIMATION and UX ENHANCEMENT UTILITIES
+   ============================================================ */
+
+function initPageAnimations() {
+    var bar = document.createElement('div');
+    bar.id = 'page-progress-bar';
+    document.body.prepend(bar);
+    setTimeout(function() { bar.remove(); }, 900);
+    var header = document.querySelector('.header');
+    if (header) { window.addEventListener('scroll', function() { header.classList.toggle('scrolled', window.scrollY > 10); }, { passive: true }); }
+    if (!document.getElementById('toast-container')) { var tc = document.createElement('div'); tc.id = 'toast-container'; document.body.appendChild(tc); }
+    document.addEventListener('click', function(e) {
+        var btn = e.target.closest('.btn');
+        if (!btn || btn.disabled) return;
+        var ripple = document.createElement('span');
+        ripple.className = 'ripple-wave';
+        var rect = btn.getBoundingClientRect();
+        ripple.style.left = (e.clientX - rect.left) + 'px';
+        ripple.style.top  = (e.clientY - rect.top)  + 'px';
+        btn.appendChild(ripple);
+        ripple.addEventListener('animationend', function() { ripple.remove(); });
+    });
+    var cards = document.querySelectorAll('.product-card');
+    if (cards.length > 0) {
+        var obs = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) { var idx = Array.from(cards).indexOf(entry.target); entry.target.style.animationDelay = (idx * 55) + 'ms'; entry.target.classList.add('visible'); obs.unobserve(entry.target); }
+            });
+        }, { threshold: 0.07 });
+        cards.forEach(function(c) { obs.observe(c); });
+    }
+    document.querySelectorAll('.order-card').forEach(function(card, idx) { card.style.animationDelay = (idx * 75) + 'ms'; });
+    document.querySelectorAll('.cart-item').forEach(function(item, idx) { item.style.animationDelay = (idx * 55) + 'ms'; });
+}
+
+function showToast(message, type, duration) {
+    if (!type) type = 'info'; if (!duration) duration = 3500;
+    var container = document.getElementById('toast-container');
+    if (!container) { container = document.createElement('div'); container.id = 'toast-container'; document.body.appendChild(container); }
+    var icons = { success: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>', error: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>', info: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#14b8a6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>' };
+    var toast = document.createElement('div'); toast.className = 'toast toast-' + type; toast.innerHTML = (icons[type] || icons.info) + '<span>' + message + '</span>'; container.appendChild(toast);
+    var dismiss = function() { toast.classList.add('hiding'); toast.addEventListener('animationend', function() { toast.remove(); }, { once: true }); };
+    setTimeout(dismiss, duration); toast.addEventListener('click', dismiss); return toast;
+}
+

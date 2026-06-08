@@ -7,26 +7,159 @@
     --text-primary: #f9fafb;
     --text-secondary: #9ca3af;
     --text-muted: #6b7280;
-    
+
     /* Brand Accents */
     --accent-teal: #14b8a6;
     --accent-teal-hover: #0d9488;
     --accent-cobalt: #3b82f6;
     --accent-cobalt-hover: #2563eb;
-    
+
     /* Status Colors */
     --color-todo: #3b82f6;
     --color-progress: #f59e0b;
     --color-done: #10b981;
     --color-danger: #ef4444;
-    
+
     /* Shadows & Transitions */
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.5);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.7), 0 4px 6px -2px rgba(0, 0, 0, 0.7);
-    --shadow-glow: 0 0 15px rgba(20, 184, 166, 0.15);
+    --shadow-glow: 0 0 15px rgba(20, 184, 166, 0.2);
+    --shadow-glow-strong: 0 0 24px rgba(20, 184, 166, 0.35);
     --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-spring: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ============================================
+   KEYFRAME ANIMATIONS
+   ============================================ */
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-20px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes progressBar {
+    from { width: 0%; opacity: 1; }
+    80%  { width: 95%; opacity: 1; }
+    to   { width: 100%; opacity: 0; }
+}
+
+@keyframes shimmer {
+    0%   { background-position: -600px 0; }
+    100% { background-position: 600px 0; }
+}
+
+@keyframes rippleExpand {
+    from { transform: scale(0); opacity: 0.4; }
+    to   { transform: scale(4); opacity: 0; }
+}
+
+@keyframes toastIn {
+    from { transform: translateX(110%); opacity: 0; }
+    to   { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes toastOut {
+    from { transform: translateX(0); opacity: 1; }
+    to   { transform: translateX(110%); opacity: 0; }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes highPriorityPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    50%       { box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2); }
+}
+
+@keyframes countUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Page fade-in */
+body {
+    animation: fadeIn 0.35s ease forwards;
+}
+
+/* Top page-load progress bar */
+#page-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-teal), var(--accent-cobalt));
+    z-index: 9999;
+    animation: progressBar 0.8s ease-out forwards;
+    border-radius: 0 2px 2px 0;
+    box-shadow: 0 0 12px rgba(20, 184, 166, 0.7);
+    pointer-events: none;
+}
+
+/* Toast Notification System */
+#toast-container {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 9998;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    pointer-events: none;
+}
+
+.toast {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--accent-teal);
+    border-radius: 10px;
+    padding: 0.85rem 1.25rem;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    max-width: 340px;
+    min-width: 240px;
+    pointer-events: all;
+    animation: toastIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.toast.toast-error { border-left-color: var(--color-danger); }
+.toast.toast-success { border-left-color: var(--color-done); }
+.toast.hiding { animation: toastOut 0.3s ease forwards; }
+
+/* Skeleton Loader */
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        var(--bg-tertiary) 25%,
+        rgba(55, 65, 81, 0.7) 50%,
+        var(--bg-tertiary) 75%
+    );
+    background-size: 600px 100%;
+    animation: shimmer 1.5s infinite linear;
+    border-radius: 8px;
+}
+
+.skeleton-task {
+    height: 96px;
+    border-radius: 10px;
+    margin-bottom: 0.75rem;
 }
 
 /* Base Styles */
@@ -76,6 +209,7 @@ body {
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
+    animation: slideInLeft 0.4s ease forwards;
 }
 
 .sidebar-header {
@@ -141,8 +275,22 @@ body {
     cursor: pointer;
     font-weight: 500;
     font-size: 0.9rem;
-    transition: var(--transition-fast);
+    transition: background-color var(--transition-fast), color var(--transition-fast), padding-left var(--transition-fast);
     margin-bottom: 0.25rem;
+    position: relative;
+}
+
+.project-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 20%;
+    height: 60%;
+    width: 3px;
+    background-color: var(--accent-teal);
+    border-radius: 0 3px 3px 0;
+    transform: scaleY(0);
+    transition: transform var(--transition-spring);
 }
 
 .project-item:hover, .project-item.active {
@@ -151,8 +299,12 @@ body {
 }
 
 .project-item.active {
-    border-left: 3px solid var(--accent-teal);
-    padding-left: calc(1rem - 3px);
+    border-left: none;
+    padding-left: 1rem;
+}
+
+.project-item.active::before {
+    transform: scaleY(1);
 }
 
 .project-item-meta {
@@ -358,12 +510,30 @@ body {
     border-radius: 12px;
     box-shadow: var(--shadow-sm);
     transition: var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.4s ease backwards;
+}
+
+.stat-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-teal), var(--accent-cobalt));
+    transition: left 0.4s ease;
 }
 
 .stat-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--text-muted);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-5px);
+    border-color: rgba(20, 184, 166, 0.4);
+    box-shadow: var(--shadow-md), var(--shadow-glow);
+}
+
+.stat-card:hover::after {
+    left: 0;
 }
 
 .stat-label {
@@ -641,7 +811,10 @@ body {
     box-shadow: var(--shadow-sm);
     cursor: grab;
     user-select: none;
-    transition: transform var(--transition-normal), border-color var(--transition-normal), box-shadow var(--transition-normal);
+    transition: transform var(--transition-normal), border-color var(--transition-normal), box-shadow var(--transition-normal), opacity var(--transition-fast);
+    /* Entrance animation with JS-applied stagger */
+    opacity: 0;
+    animation: fadeInUp 0.35s ease forwards;
 }
 
 .task-card:active {
@@ -649,9 +822,28 @@ body {
 }
 
 .task-card:hover {
-    transform: translateY(-2px);
-    border-color: var(--text-muted);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-4px) scale(1.01);
+    border-color: rgba(20, 184, 166, 0.45);
+    box-shadow: 0 12px 32px rgba(20, 184, 166, 0.12), 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* Dragging state */
+.task-card.dragging {
+    opacity: 0.55;
+    transform: rotate(2deg) scale(1.04);
+    box-shadow: 0 16px 40px rgba(20, 184, 166, 0.25);
+    border-color: var(--accent-teal);
+}
+
+/* High priority visual pulse */
+.task-card[data-priority="HIGH"],
+.task-card .task-priority-tag.high {
+    /* Parent card gets the pulse via JS adding data-priority */
+}
+
+.task-card.priority-high {
+    animation: highPriorityPulse 2.5s ease-in-out infinite, fadeInUp 0.35s ease forwards;
+    border-left: 3px solid var(--color-danger);
 }
 
 .task-card-header {
@@ -737,13 +929,30 @@ body {
     font-size: 0.85rem;
     margin-top: 1rem;
     width: 100%;
-    transition: var(--transition-fast);
+    transition: border-color var(--transition-fast), color var(--transition-fast), background-color var(--transition-fast), transform var(--transition-fast);
 }
 
 .kanban-add-btn:hover {
     border-color: var(--accent-teal);
     color: var(--accent-teal);
-    background-color: rgba(20, 184, 166, 0.02);
+    background-color: rgba(20, 184, 166, 0.04);
+    transform: translateY(-1px);
+}
+
+/* Drag-active columns highlight */
+.kanban-board.drag-active .kanban-cards-wrapper:not(.drag-over) {
+    border: 1px dashed rgba(20, 184, 166, 0.2);
+}
+
+@keyframes dropZonePulse {
+    0%, 100% { border-color: var(--accent-teal); }
+    50%       { border-color: rgba(20, 184, 166, 0.4); }
+}
+
+.kanban-cards-wrapper.drag-over {
+    background-color: rgba(20, 184, 166, 0.06);
+    border: 1px dashed var(--accent-teal) !important;
+    animation: dropZonePulse 1s ease-in-out infinite;
 }
 
 /* Modals */
@@ -872,6 +1081,25 @@ select {
     border: 1px solid transparent;
     cursor: pointer;
     transition: var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+}
+
+.btn:active {
+    transform: scale(0.96);
+}
+
+.btn .ripple-wave {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    width: 60px;
+    height: 60px;
+    margin-top: -30px;
+    margin-left: -30px;
+    animation: rippleExpand 0.6s linear forwards;
+    pointer-events: none;
 }
 
 .btn-block {
@@ -880,11 +1108,14 @@ select {
 }
 
 .btn-primary {
-    background-color: var(--accent-teal);
+    background: linear-gradient(135deg, var(--accent-teal), #0ea5e9);
     color: #000;
+    box-shadow: 0 4px 14px rgba(20, 184, 166, 0.3);
 }
 .btn-primary:hover {
-    background-color: var(--accent-teal-hover);
+    background: linear-gradient(135deg, var(--accent-teal-hover), #0284c7);
+    box-shadow: 0 6px 20px rgba(20, 184, 166, 0.45);
+    transform: translateY(-1px);
 }
 
 .btn-outline {
@@ -893,8 +1124,9 @@ select {
     color: var(--text-secondary);
 }
 .btn-outline:hover {
-    border-color: var(--text-secondary);
-    color: var(--text-primary);
+    border-color: var(--accent-teal);
+    color: var(--accent-teal);
+    transform: translateY(-1px);
 }
 
 .btn-danger-outline {
@@ -903,14 +1135,21 @@ select {
     color: var(--color-danger);
 }
 .btn-danger-outline:hover {
-    background-color: rgba(239, 68, 68, 0.05);
+    background-color: rgba(239, 68, 68, 0.06);
     border-color: var(--color-danger);
+    transform: translateY(-1px);
 }
 
 .btn-sm {
     padding: 0.4rem 0.8rem;
     font-size: 0.85rem;
     border-radius: 6px;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
 }
 
 .error-msg {
@@ -1165,12 +1404,20 @@ select {
 @keyframes modalSlideUp {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(16px) scale(0.97);
     }
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
     }
+}
+
+/* Input focus upgrade */
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--accent-teal);
+    box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15), var(--shadow-glow);
 }
 
 /* Responsive queries */
